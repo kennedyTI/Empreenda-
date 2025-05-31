@@ -1,10 +1,10 @@
 # 🚀 Empreenda+ – Auth Service
 
-Este projeto é o serviço de autenticação do sistema Empreenda+, utilizando **FastAPI**, **JWT** e **MongoDB**.
+Este projeto é o serviço de autenticação do sistema **Empreenda+**, construído com **FastAPI**, **JWT** e **MongoDB**.
 
 ---
 
-## 📦 Estrutura
+## 📦 Estrutura do Projeto
 
 ```
 backend/
@@ -24,19 +24,33 @@ backend/
 
 ## ⚙️ Pré-requisitos
 
-- Docker e Docker Compose instalados
-- Python 3.11+ (somente para testes locais fora do Docker)
-- MongoDB Compass (opcional, para inspeção visual do banco)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- (Opcional) [MongoDB Compass](https://www.mongodb.com/products/compass) para visualizar os dados
+- Python 3.11+ (caso queira rodar fora do container, para desenvolvimento e testes)
 
 ---
 
-## ▶️ Executar o projeto
+## ▶️ Como rodar o projeto
 
 ```bash
 docker-compose up --build
 ```
 
-A API estará disponível em: [http://localhost:8000/docs](http://localhost:8000/docs)
+Acesse a API em:  
+📎 [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+## ✅ Verificação automática de conexão com MongoDB
+
+Ao iniciar o `auth_service`, a conexão com o MongoDB é automaticamente validada.
+
+Você verá no terminal algo como:
+
+```
+INFO:root:✅ Conexão com o MongoDB estabelecida com sucesso.
+```
 
 ---
 
@@ -46,12 +60,18 @@ A API estará disponível em: [http://localhost:8000/docs](http://localhost:8000
 docker-compose exec auth_service python tests/user_mock.py
 ```
 
+Isso cria um usuário com:
+
+- **Email**: `usuario@exemplo.com`  
+- **Senha**: `senha123`
+
 ---
 
-## 🔐 Testar a rota de login (/login)
+## 🔐 Testar rota de login `/login`
 
-### Acesse a documentação Swagger:
-[http://localhost:8000/docs](http://localhost:8000/docs)
+### Acesse o Swagger:
+
+📎 [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ### Faça login com:
 
@@ -60,7 +80,7 @@ username: usuario@exemplo.com
 password: senha123
 ```
 
-Se tudo estiver correto, a resposta será:
+Resposta esperada:
 
 ```json
 {
@@ -71,20 +91,23 @@ Se tudo estiver correto, a resposta será:
 
 ---
 
-## 🔒 Testar rotas protegidas com JWT
+## 🔒 Acessar rota protegida `/protegido`
 
-1. Copie o token da resposta do `/login`
-2. Acesse a rota `/protegido` na mesma interface `/docs`
-3. Clique em "Authorize", cole o token como:
+1. Copie o token retornado do `/login`
+2. Vá até `/docs` e clique em **Authorize**
+3. Insira o token no formato:
 
 ```
 Bearer <seu_token>
 ```
 
-4. Envie a requisição. A resposta será:
+4. Acesse a rota `/protegido`. Resposta esperada:
 
 ```json
-{ "mensagem": "Você acessou uma rota protegida!", "usuario": "usuario@exemplo.com" }
+{
+  "mensagem": "Você acessou uma rota protegida!",
+  "usuario": "usuario@exemplo.com"
+}
 ```
 
 ---
@@ -97,9 +120,8 @@ docker-compose exec auth_service pytest
 
 ---
 
-## 📂 Conectar o MongoDB ao Compass
+## 📂 Conectar ao MongoDB pelo Compass
 
-### String de conexão:
 ```
 mongodb://localhost:27017
 ```
@@ -109,22 +131,35 @@ Coleção: `users`
 
 ---
 
-## 📌 Variáveis de ambiente
+## ⚙️ Variáveis de Ambiente (.env)
 
-No momento, apenas a variável `ENV` é utilizada para ativar a atualização automática do `requirements.txt`:
+Atualmente em desenvolvimento é usada:
 
 ```env
 ENV=dev
 ```
 
----
-
-## 🛠️ Requisitos do projeto (`requirements.txt`)
-
-Atualizado automaticamente a cada execução em ambiente de desenvolvimento.
+Essa flag ativa a **atualização automática** do `requirements.txt`.
 
 ---
 
-## 👥 Contribuição
+## 🛠️ Atualização do requirements.txt
 
-Este projeto é parte do ecossistema **Empreenda+**, voltado para facilitar a vida do MEI no Brasil.
+O arquivo `requirements.txt` é atualizado automaticamente em ambiente de desenvolvimento toda vez que o container sobe.
+
+---
+
+## 📌 Notas de segurança
+
+Antes de subir para produção, lembre-se de:
+
+- Proteger suas chaves `.env` e JWT_SECRET
+- Usar **Docker Secrets** ou **Vault** para credenciais sensíveis
+
+---
+
+## 👥 Sobre o projeto
+
+**Empreenda+** é um sistema pensado para simplificar a vida do **MEI brasileiro**, com foco em automação, orientação inteligente e integração com parceiros.
+
+---
