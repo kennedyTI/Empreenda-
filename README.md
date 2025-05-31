@@ -157,7 +157,84 @@ Antes de subir para produção, lembre-se de:
 - Usar **Docker Secrets** ou **Vault** para credenciais sensíveis
 
 ---
+Aqui está um resumo do que foi conquistado:
 
+✅ Etapa 1 – Estrutura inicial do projeto
+Criada a estrutura de diretórios: auth_service/, routes/, models/, services/, utils/, tests/
+
+Criado o Dockerfile e docker-compose.yml
+
+Definido o padrão de projeto baseado em FastAPI
+
+Comando de inicialização via uvicorn
+
+Ambiente com reload para desenvolvimento
+
+✅ Etapa 2 – Rota de login com JWT
+Implementada a rota POST /login
+
+Utilizado OAuth2PasswordRequestForm para receber username e password
+
+Criado o esquema TokenResponse
+
+Implementada a função autenticar_usuario com validação de senha
+
+Criado utils/security.py com:
+
+verificar_senha
+
+criar_token_acesso
+
+gerar_hash_senha
+
+JWT gerado com python-jose
+
+✅ Etapa 3 – Proteção de rotas com JWT
+Criada a rota /protegido acessível apenas com token válido
+
+Implementado Depends(get_current_user) para validar o JWT
+
+Testes via Swagger UI (/docs) com Bearer <token>
+
+Autenticação funcionando fim a fim: MongoDB → Validação → JWT
+
+✅ Etapa 4 – Integração real com MongoDB
+Substituição do usuário fake por consulta real no banco
+
+Banco MongoDB containerizado e persistente
+
+Script user_mock.py para criar usuário de teste
+
+Acesso funcional via MongoDB Compass
+
+Implementado verificador automático de conexão:
+
+Executado no startup_event do FastAPI
+
+Lê variáveis de ambiente
+
+Usa pymongo com timeout controlado
+
+requirements.txt atualizado dinamicamente
+
+Organização e importações corrigidas e comentadas
+
+🎁 Extras
+README.md completo e formatado com instruções de uso
+
+Projeto inteiramente funcional via Docker Compose
+
+Código totalmente comentado
+
+Preparação para boas práticas futuras:
+
+Uso de .env para variáveis sensíveis
+
+Planejamento para Docker Secrets na produção
+
+---
+
+Testes automatizados em estrutura pronta (tests/)
 ## 👥 Sobre o projeto
 
 **Empreenda+** é um sistema pensado para simplificar a vida do **MEI brasileiro**, com foco em automação, orientação inteligente e integração com parceiros.
