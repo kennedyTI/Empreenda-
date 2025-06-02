@@ -9,32 +9,36 @@ Este projeto é o serviço de autenticação do sistema **Empreenda+**, constru�
 ```
 backend/ 
 ├── auth_service/
-│   ├── main.py                        # Entrada principal do FastAPI
-│   ├── db/ 
-│   │   └── mongo.py                   # Conexão com MongoDB usando .env
-│   ├── models/ 
-│   │   └── user.py                    # Modelo e busca de usuário
-│   ├── routes/ 
-│   │   ├── login.py                   # Rota de login
-│   │   ├── protected.py               # Rota protegida com JWT
-│   │   └── signup.py                  # Rota para cadastro de usuários
-│   ├── schemas/
-│   │   ├── token.py                   # Schema de resposta de token
-│   │   └── user.py                    # Schemas de entrada/saída do usuário
-│   ├── services/
-│   │   ├── auth.py                    # Lógica de autenticação e geração de token
-│   │   └── user_service.py            # Criação e busca de usuários no MongoDB
+│   ├── main.py ✅                         # Entrada principal do FastAPI
+│   ├── db/ ✅
+│   │   └── mongo.py ✅                    # Conexão com MongoDB usando .env
+│   ├── models/ ✅
+│   │   └── user.py ✅                     # Modelo e busca de usuário
+│   ├── routes/ ✅
+│   │   ├── login.py ✅                    # Rota de login
+│   │   ├── protected.py ✅                # Rota protegida com JWT
+│   │   └── signup.py ✅                  # Rota para cadastro de usuários
+│   ├── schemas/ ✅
+│   │   ├── token.py ✅                    # Schema de resposta de token
+│   │   └── user.py ✅                     # Schemas de entrada/saída do usuário
+│   ├── services/ ✅
+│   │   ├── auth.py ✅                     # Lógica de autenticação e geração de token
+│   │   └── user_service.py ✅            # Criação e busca de usuários no MongoDB
 │   └── utils/
-│       ├── criar_usuario_mock.py      # Cria automaticamente usuário fake em dev
-│       ├── security.py                # Segurança: hashing e JWT
-│       ├── verificar_mongodb.py       # Testa conexão com o MongoDB
-│       └── update_requirements 
-├── tests/
-│   └── test_auth.py
-├── .env                               # Variáveis de ambiente
-├── docker-compose.yml                 # Orquestração com Docker
-├── requirements.txt                   # Dependências Python
-├── README.md
+│       ├── criar_usuario_mock.py ✅      # Cria automaticamente usuário fake em dev
+│       ├── email_service
+│       ├── i18n
+│       ├──limiter
+│       ├── security.py ✅                # Segurança: hashing e JWT
+│       ├── verificar_mongodb.py ✅      # Testa conexão com o MongoDB
+│       └── update_requirements ✅ 
+├── tests/✅
+│   └── test_auth.py ✅
+├── .env ✅                           # Variáveis de ambiente
+├── docker-compose.yml ✅                 # Orquestração com Docker
+├── dockerfile
+├── requirements.txt ✅                   # Dependências Python
+├── README.md ✅
 ```
 
 ---
