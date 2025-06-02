@@ -1,16 +1,17 @@
-# backend/auth_service/routes/protected.py
+# Rota protegida – acessível apenas com token válido
 
 from fastapi import APIRouter, Depends
 from auth_service.utils.security import get_current_user
 
-# Cria um novo router para rotas protegidas
 router = APIRouter()
 
-# Rota protegida por token JWT
-@router.get("/protected")
-def rota_protegida(usuario=Depends(get_current_user)):
+@router.get("/protegido")
+def rota_protegida(usuario: dict = Depends(get_current_user)):
     """
-    Rota protegida por autenticação JWT.
-    Requer token válido no header Authorization: Bearer <token>
+    Exemplo de rota protegida com autenticação JWT.
+    Retorna mensagem e email do usuário autenticado.
     """
-    return {"mensagem": f"Acesso liberado para {usuario['email']}"}
+    return {
+        "mensagem": "Você acessou uma rota protegida!",
+        "usuario": usuario["email"]
+    }

@@ -16,3 +16,4 @@ def buscar_usuario_por_email(email: str):
     """
     usuario = db[COLLECTION_NAME].find_one({"email": email})
     return usuario
+

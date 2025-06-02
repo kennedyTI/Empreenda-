@@ -1,18 +1,22 @@
-# backend/auth_service/routes/login.py
-# Roteador de autenticação com rota POST /login
+# Rota POST /login – Autentica o usuário e retorna token JWT
 
-from fastapi import APIRouter, Depends
-from fastapi.security import OAuth2PasswordRequestForm
-from auth_service.schemas import TokenResponse
+from fastapi import APIRouter, Form, HTTPException
 from auth_service.services.auth import autenticar_usuario
+from auth_service.schemas.token import TokenResponse
 
 router = APIRouter()
 
 @router.post("/login", response_model=TokenResponse)
-def login(form_data: OAuth2PasswordRequestForm = Depends()):
+def login(username: str = Form(...), password: str = Form(...)):
     """
-    Rota de login usando formulário OAuth2 (username=Email, password=Senha)
-    Retorna JWT se autenticação for válida
+    Realiza login do usuário.
+    Espera os dados via formulário (application/x-www-form-urlencoded).
+
+    Retorna:
+    - Token JWT de acesso, se login for bem-sucedido.
     """
-    token = autenticar_usuario(form_data.username, form_data.password)
-    return {"access_token": token, "token_type": "bearer"}
+    try:
+        token = autenticar_usuario(username, password)
+        return {"access_token": token, "token_type": "bearer"}
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=str(e))

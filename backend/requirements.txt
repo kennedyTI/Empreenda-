@@ -3,6 +3,7 @@ anyio==4.9.0
 bcrypt==4.0.1
 certifi==2025.4.26
 click==8.2.1
+colorama==0.4.6
 dnspython==2.7.0
 ecdsa==0.19.1
 email_validator==2.2.0

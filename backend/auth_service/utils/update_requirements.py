@@ -1,14 +1,14 @@
+# Atualiza automaticamente o requirements.txt no ambiente de desenvolvimento
+
 import subprocess
 import os
 from pathlib import Path
 
 def atualizar_requirements():
     """
-    Atualiza o arquivo requirements.txt com os pacotes atualmente instalados no ambiente,
-    salvando sempre no diretório raiz do projeto (backend/requirements.txt).
+    Atualiza o arquivo requirements.txt com os pacotes instalados no ambiente.
     """
     try:
-        # Caminho absoluto até o diretório raiz do projeto
         raiz = Path(__file__).resolve().parent.parent.parent
         caminho_reqs = raiz / "requirements.txt"
 

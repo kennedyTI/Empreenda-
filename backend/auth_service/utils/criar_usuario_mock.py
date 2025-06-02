@@ -1,11 +1,11 @@
-# auth_service/utils/criar_usuario_mock.py
+# Cria um usuário fake automaticamente em ambiente de desenvolvimento
 
 from pymongo import MongoClient
 from passlib.context import CryptContext
 import os
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://mongodb:27017")
-DB_NAME = os.getenv("DB_NAME", "empreendadb")
+DB_NAME = os.getenv("MONGO_DB_NAME", "empreendadb")
 COLLECTION_NAME = "users"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

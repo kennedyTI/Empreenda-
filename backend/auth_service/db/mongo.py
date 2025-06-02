@@ -1,12 +1,14 @@
 # backend/auth_service/db/mongo.py
 
 from pymongo import MongoClient
+from dotenv import load_dotenv
 import os
 
-# Recupera URI do Mongo a partir de variável de ambiente (padrão: localhost)
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://mongodb:27017")
-DB_NAME = "empreendadb"
+# Carrega variáveis do .env
+load_dotenv()
 
-# Cria conexão com o MongoDB
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://mongodb:27017")
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")  # Agora carrega corretamente do .env
+
 client = MongoClient(MONGO_URI)
-db = client[DB_NAME]
+db = client[MONGO_DB_NAME]

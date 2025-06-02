@@ -7,17 +7,34 @@ Este projeto é o serviço de autenticação do sistema **Empreenda+**, constru�
 ## 📦 Estrutura do Projeto
 
 ```
-backend/
+backend/ 
 ├── auth_service/
-│   ├── main.py
-│   ├── routes/
-│   ├── models/
+│   ├── main.py                        # Entrada principal do FastAPI
+│   ├── db/ 
+│   │   └── mongo.py                   # Conexão com MongoDB usando .env
+│   ├── models/ 
+│   │   └── user.py                    # Modelo e busca de usuário
+│   ├── routes/ 
+│   │   ├── login.py                   # Rota de login
+│   │   ├── protected.py               # Rota protegida com JWT
+│   │   └── signup.py                  # Rota para cadastro de usuários
+│   ├── schemas/
+│   │   ├── token.py                   # Schema de resposta de token
+│   │   └── user.py                    # Schemas de entrada/saída do usuário
 │   ├── services/
+│   │   ├── auth.py                    # Lógica de autenticação e geração de token
+│   │   └── user_service.py            # Criação e busca de usuários no MongoDB
 │   └── utils/
+│       ├── criar_usuario_mock.py      # Cria automaticamente usuário fake em dev
+│       ├── security.py                # Segurança: hashing e JWT
+│       ├── verificar_mongodb.py       # Testa conexão com o MongoDB
+│       └── update_requirements 
 ├── tests/
-│   └── user_mock.py
-├── docker-compose.yml
-└── requirements.txt
+│   └── test_auth.py
+├── .env                               # Variáveis de ambiente
+├── docker-compose.yml                 # Orquestração com Docker
+├── requirements.txt                   # Dependências Python
+├── README.md
 ```
 
 ---
@@ -27,7 +44,7 @@ backend/
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - (Opcional) [MongoDB Compass](https://www.mongodb.com/products/compass) para visualizar os dados
-- Python 3.11+ (caso queira rodar fora do container, para desenvolvimento e testes)
+- Python 3.11+ (para desenvolvimento local com venv)
 
 ---
 
@@ -44,9 +61,7 @@ Acesse a API em:
 
 ## ✅ Verificação automática de conexão com MongoDB
 
-Ao iniciar o `auth_service`, a conexão com o MongoDB é automaticamente validada.
-
-Você verá no terminal algo como:
+A aplicação realiza uma checagem automática ao subir. Se estiver tudo ok:
 
 ```
 INFO:root:✅ Conexão com o MongoDB estabelecida com sucesso.
@@ -56,11 +71,7 @@ INFO:root:✅ Conexão com o MongoDB estabelecida com sucesso.
 
 ## 🧪 Criar usuário de teste no MongoDB
 
-```bash
-docker-compose exec auth_service python tests/user_mock.py
-```
-
-Isso cria um usuário com:
+Ao iniciar em ambiente `dev`, é criado um usuário automaticamente:
 
 - **Email**: `usuario@exemplo.com`  
 - **Senha**: `senha123`
@@ -69,7 +80,7 @@ Isso cria um usuário com:
 
 ## 🔐 Testar rota de login `/login`
 
-### Acesse o Swagger:
+### Acesse:
 
 📎 [http://localhost:8000/docs](http://localhost:8000/docs)
 
@@ -93,15 +104,15 @@ Resposta esperada:
 
 ## 🔒 Acessar rota protegida `/protegido`
 
-1. Copie o token retornado do `/login`
-2. Vá até `/docs` e clique em **Authorize**
-3. Insira o token no formato:
+1. Copie o token JWT obtido no `/login`
+2. Vá até `/docs`, clique em **Authorize**
+3. Cole:
 
 ```
 Bearer <seu_token>
 ```
 
-4. Acesse a rota `/protegido`. Resposta esperada:
+4. Teste a rota `/protegido`. A resposta será:
 
 ```json
 {
@@ -114,30 +125,49 @@ Bearer <seu_token>
 
 ## 🧪 Rodar testes automatizados (em construção)
 
+Execute os testes com:
+
 ```bash
 docker-compose exec auth_service pytest
 ```
+
+Os testes estão em `tests/test_auth.py`, incluindo:
+
+- Login com credenciais inválidas
+- Login com credenciais válidas (usuário mock)
 
 ---
 
 ## 📂 Conectar ao MongoDB pelo Compass
 
+Acesse:
+
 ```
-mongodb://localhost:27017
+mongodb://localhost:28000
 ```
 
-Banco: `empreendadb`  
+Banco: `OliveiraDevelops`  
 Coleção: `users`
 
 ---
 
 ## ⚙️ Variáveis de Ambiente (.env)
 
-Atualmente em desenvolvimento é usada:
-
 ```env
+# Ambiente
 ENV=dev
+
+# JWT
+JWT_SECRET=minha_chave_secreta_segura
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# MongoDB
+MONGO_URI=mongodb://mongodb:27017
+MONGO_DB_NAME=OliveiraDevelops
 ```
+
+---
 
 Essa flag ativa a **atualização automática** do `requirements.txt`.
 
@@ -203,7 +233,7 @@ Substituição do usuário fake por consulta real no banco
 
 Banco MongoDB containerizado e persistente
 
-Script user_mock.py para criar usuário de teste
+Script `criar_usuario_mock.py` executado automaticamente
 
 Acesso funcional via MongoDB Compass
 
@@ -218,6 +248,19 @@ Usa pymongo com timeout controlado
 requirements.txt atualizado dinamicamente
 
 Organização e importações corrigidas e comentadas
+
+Conexão com MongoDB real
+
+Conexão validada na inicialização do serviço
+
+Compass acessando MongoDB containerizado
+
+### 👤 Etapa 5 – Registro real de usuários
+
+- Rota `/signup` funcional
+- Dados persistidos no MongoDB
+- Login usando credenciais reais
+
 
 🎁 Extras
 README.md completo e formatado com instruções de uso
@@ -239,4 +282,11 @@ Testes automatizados em estrutura pronta (tests/)
 
 **Empreenda+** é um sistema pensado para simplificar a vida do **MEI brasileiro**, com foco em automação, orientação inteligente e integração com parceiros.
 
+- Abertura de CNPJ
+- Emissão de NF
+- Alertas fiscais
+- Atendimento automatizado com IA
+
 ---
+
+Feito com ❤️ e Python.
