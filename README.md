@@ -284,4 +284,4 @@ Testes automatizados em estrutura pronta (tests/)
 
 ---
 
-Feito com ❤️ e Python.
+Feito com ❤️ e Python...
