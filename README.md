@@ -187,93 +187,88 @@ Antes de subir para produção, lembre-se de:
 - Usar **Docker Secrets** ou **Vault** para credenciais sensíveis
 
 ---
-Aqui está um resumo do que foi conquistado:
 
-✅ Etapa 1 – Estrutura inicial do projeto
-Criada a estrutura de diretórios: auth_service/, routes/, models/, services/, utils/, tests/
+✅ ETAPAS JÁ CONCLUÍDAS
 
-Criado o Dockerfile e docker-compose.yml
+✅ Etapa 1 – Estrutura Inicial do Projeto
 
-Definido o padrão de projeto baseado em FastAPI
+Estrutura de pastas organizada (auth_service/, routes/, models/, services/, utils/, tests/)
 
-Comando de inicialização via uvicorn
+Uso de Docker + Docker Compose
 
-Ambiente com reload para desenvolvimento
+Configuração de ambiente com .env e reload automático com uvicorn
 
-✅ Etapa 2 – Rota de login com JWT
-Implementada a rota POST /login
+✅ Etapa 2 – Login com JWT
 
-Utilizado OAuth2PasswordRequestForm para receber username e password
+Rota /login funcional
 
-Criado o esquema TokenResponse
+Autenticação via OAuth2PasswordRequestForm
 
-Implementada a função autenticar_usuario com validação de senha
+Senhas com hash bcrypt
 
-Criado utils/security.py com:
+Geração de tokens JWT com tempo de expiração
 
-verificar_senha
+Schema de resposta TokenResponse
 
-criar_token_acesso
+✅ Etapa 3 – Proteção de Rotas
 
-gerar_hash_senha
+Rota protegida /protegido
 
-JWT gerado com python-jose
+Autenticação via Bearer Token
 
-✅ Etapa 3 – Proteção de rotas com JWT
-Criada a rota /protegido acessível apenas com token válido
+Dependência de segurança get_current_user
 
-Implementado Depends(get_current_user) para validar o JWT
+Verificação do token e retorno do usuário
 
-Testes via Swagger UI (/docs) com Bearer <token>
+✅ Etapa 4 – Integração Real com MongoDB
 
-Autenticação funcionando fim a fim: MongoDB → Validação → JWT
+Substituição de usuários fake por persistência real
 
-✅ Etapa 4 – Integração real com MongoDB
-Substituição do usuário fake por consulta real no banco
+MongoDB funcional com volume Docker (mongodb)
 
-Banco MongoDB containerizado e persistente
+Criação automática de usuário de teste (criar_usuario_mock.py)
 
-Script `criar_usuario_mock.py` executado automaticamente
+Conexão validada automaticamente no startup (verificar_conexao_mongodb)
 
-Acesso funcional via MongoDB Compass
+Compass conectado com banco containerizado
 
-Implementado verificador automático de conexão:
+✅ Etapa 5 – Cadastro Real de Usuários
 
-Executado no startup_event do FastAPI
+Rota /signup funcional com persistência no MongoDB
 
-Lê variáveis de ambiente
+Esquema SignupRequest validando os dados
 
-Usa pymongo com timeout controlado
+Proteção contra e-mails duplicados
 
-requirements.txt atualizado dinamicamente
+Testes automatizados para /signup:
 
-Organização e importações corrigidas e comentadas
+Cadastro válido
 
-Conexão com MongoDB real
+E-mail duplicado
 
-Conexão validada na inicialização do serviço
+Proteção contra SPAM por IP
 
-Compass acessando MongoDB containerizado
+Controle de IP temporário (rate limit por IP)
 
-### 👤 Etapa 5 – Registro real de usuários
+Logs para facilitar debug
 
-- Rota `/signup` funcional
-- Dados persistidos no MongoDB
-- Login usando credenciais reais
+Observação registrada para uso de Redis no futuro em produção
 
+Atualização automática do requirements.txt
+
+Venv configurado com activate_hook
 
 🎁 Extras
-README.md completo e formatado com instruções de uso
 
-Projeto inteiramente funcional via Docker Compose
+Logs informativos no terminal
 
-Código totalmente comentado
+requirements.txt atualizado automaticamente apenas no ambiente dev
 
-Preparação para boas práticas futuras:
+Observação sobre @app.on_event("startup") marcada para futura migração para lifespan
 
-Uso de .env para variáveis sensíveis
+README.md completo e comentado
 
-Planejamento para Docker Secrets na produção
+Proteção mínima contra SPAM funcional
 
 ---
 
