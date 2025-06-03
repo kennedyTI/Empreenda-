@@ -1,4 +1,9 @@
-# Funções de segurança: hash de senha, geração e validação de tokens JWT
+"""
+Funções de segurança para autenticação e proteção:
+- Hash de senha com bcrypt
+- Geração e validação de tokens JWT
+- Autenticação via OAuth2
+"""
 
 from passlib.context import CryptContext
 from jose import jwt, JWTError
@@ -7,33 +12,36 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 import os
 
-# Configura o algoritmo de hashing
+# 🔐 Configuração de hashing seguro
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Lê configurações do .env
-SECRET_KEY = os.getenv("JWT_SECRET", "chave_padrao_insegura")
+# 🔐 Leitura obrigatória de variáveis de ambiente (via container)
+SECRET_KEY = os.getenv("JWT_SECRET")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 EXPIRES_MIN = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
-# Gera hash seguro da senha
+if not SECRET_KEY:
+    raise EnvironmentError("❌ JWT_SECRET não definido no ambiente.")
+
+# 🔑 Gera um hash seguro da senha (bcrypt)
 def gerar_hash_senha(senha: str):
     return pwd_context.hash(senha)
 
-# Verifica se a senha fornecida corresponde ao hash armazenado
+# 🔎 Verifica se uma senha corresponde ao hash armazenado
 def verificar_senha(senha: str, hash_senha: str):
     return pwd_context.verify(senha, hash_senha)
 
-# Cria um token JWT com tempo de expiração
+# 🪪 Gera token JWT com dados e expiração
 def criar_token_acesso(dados: dict):
     to_encode = dados.copy()
     expire = datetime.utcnow() + timedelta(minutes=EXPIRES_MIN)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# OAuth2 espera o token no header Authorization: Bearer <token>
+# 🧩 FastAPI: espera token no header Authorization: Bearer <token>
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
-# Extrai e valida o token, retornando o "usuário atual"
+# ✅ Extrai o usuário do token JWT
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

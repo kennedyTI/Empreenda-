@@ -1,11 +1,14 @@
-# auth_service/utils/i18n.py
+"""
+Internacionalização de mensagens (i18n) para suporte multilíngue na API.
+Atualmente suporta "pt" (português) e "en" (inglês).
+"""
 
 from typing import Literal
 
-# 🔤 Tipo restrito para linguagens suportadas
+# 🔤 Tipo que restringe os valores válidos para idioma
 IdiomaSuportado = Literal["pt", "en"]
 
-# 🌍 Dicionário central de mensagens traduzidas
+# 🌍 Dicionário centralizado com mensagens em dois idiomas
 MENSAGENS = {
     "signup.success": {
         "pt": "Usuário criado com sucesso",
@@ -45,14 +48,14 @@ def traduzir(chave: str, lang: str = "pt") -> str:
     """
     Retorna a mensagem traduzida com base na chave e idioma fornecidos.
 
-    Parâmetros:
+    Args:
     - chave (str): identificador da mensagem.
     - lang (str): idioma desejado ('pt' ou 'en').
 
-    Retorno:
-    - Mensagem traduzida (str). Se não encontrada, retorna a própria chave.
+    Returns:
+    - Mensagem traduzida. Se chave ou idioma não encontrado, retorna a própria chave.
     """
     mensagem = MENSAGENS.get(chave)
     if mensagem:
         return mensagem.get(lang, mensagem.get("pt", chave))
-    return chave  # 🔁 Se chave não encontrada, retorna literal
+    return chave  # 🔁 Fallback: retorna a chave literal se não existir

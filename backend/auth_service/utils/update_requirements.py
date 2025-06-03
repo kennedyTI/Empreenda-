@@ -1,4 +1,7 @@
-# Atualiza automaticamente o requirements.txt no ambiente de desenvolvimento
+"""
+Atualiza automaticamente o arquivo requirements.txt
+⚠️ Deve ser usado apenas no ambiente de desenvolvimento (ENV=dev).
+"""
 
 import subprocess
 import os
@@ -6,7 +9,7 @@ from pathlib import Path
 
 def atualizar_requirements():
     """
-    Atualiza o arquivo requirements.txt com os pacotes instalados no ambiente.
+    Executa pip freeze e sobrescreve requirements.txt com dependências atuais.
     """
     try:
         raiz = Path(__file__).resolve().parent.parent.parent

@@ -1,287 +1,193 @@
-# 🚀 Empreenda+ – Auth Service
+# 🚀 Empreenda+ – Plataforma Completa (Backend + Frontend)
 
-Este projeto é o serviço de autenticação do sistema **Empreenda+**, construído com **FastAPI**, **JWT** e **MongoDB**.
+Este projeto é a base da plataforma **Empreenda+**, voltada para MEIs e pequenos empreendedores, com funcionalidades como autenticação, painel administrativo, e integração inteligente entre serviços. 
+
+Conta com:
+- Backend em **FastAPI** com JWT e MongoDB
+- Frontend em **Next.js + Tailwind + TypeScript**
+- Totalmente **dockerizado**, preparado para produção em cloud
+
+---
+
+![Tests](https://github.com/kennedyTI/Empreenda-Plus/actions/workflows/backend-tests.yml/badge.svg)
 
 ---
 
 ## 📦 Estrutura do Projeto
 
+A seguir, a estrutura completa do repositório Empreenda+, com comentários por etapa:
+
 ```
-backend/ 
-├── auth_service/
-│   ├── main.py                        # Entrada principal do FastAPI
-│   ├── db/ 
-│   │   └── mongo.py                   # Conexão com MongoDB usando .env
-│   ├── models/ 
-│   │   └── user.py                    # Modelo e busca de usuário
-│   ├── routes/ 
-│   │   ├── login.py                   # Rota de login
-│   │   ├── protected.py               # Rota protegida com JWT
-│   │   └── signup.py                  # Rota para cadastro de usuários
-│   ├── schemas/
-│   │   ├── token.py                   # Schema de resposta de token
-│   │   └── user.py                    # Schemas de entrada/saída do usuário
-│   ├── services/
-│   │   ├── auth.py                    # Lógica de autenticação e geração de token
-│   │   └── user_service.py            # Criação e busca de usuários no MongoDB
-│   └── utils/
-│       ├── criar_usuario_mock.py      # Cria automaticamente usuário fake em dev
-│       ├── security.py                # Segurança: hashing e JWT
-│       ├── verificar_mongodb.py       # Testa conexão com o MongoDB
-│       └── update_requirements 
-├── tests/
-│   └── test_auth.py
-├── .env                               # Variáveis de ambiente
-├── docker-compose.yml                 # Orquestração com Docker
-├── requirements.txt                   # Dependências Python
-├── README.md
+Empreenda+/                      # Raiz do projeto fullstack (frontend + backend)
+├── frontend/                         # Aplicação web Next.js (institucional + dashboard)
+│   ├── Dockerfile                    # Dockerfile para build e execução do frontend
+│   ├── public/                       # Arquivos públicos, imagens, favicon, etc.
+│   ├── src/                          # Código fonte
+│   │   ├── pages/                   # Rotas e páginas (Next.js)
+│   │   ├── components/              # Componentes reutilizáveis
+│   │   ├── styles/                  # TailwindCSS e estilos globais
+│   │   └── ...                      # Outros utilitários e hooks
+│   ├── package.json                 # Dependências e scripts do frontend
+│   └── tsconfig.json                # Configuração TypeScript
+│
+├── backend/                          # Backend FastAPI com autenticação e MongoDB
+│   ├── __init__.py                   # Torna o diretório backend um pacote Python
+│   ├── .env                          # Variáveis de ambiente (nunca commitar)
+│   ├── .env.example                  # Exemplo seguro para uso no repositório
+│   ├── .gitignore                    # Ignora arquivos sensíveis e temporários
+│   ├── Dockerfile                    # Dockerfile com multi-stage para backend
+│   ├── docker-compose.yml           # Orquestra backend, frontend e MongoDB
+│   ├── requirements.txt             # Dependências fixadas do backend
+│   ├── tests/                        # Testes automatizados com pytest
+│   │   └── test_auth.py             # Testes de login, signup e JWT
+│   ├── .github/
+│   │   └── workflows/
+│   │       └── backend-tests.yml    # GitHub Actions (CI para backend)
+│   └── auth_service/                # Código principal do FastAPI
+│       ├── __init__.py
+│       ├── main.py                  # Entrada FastAPI
+│       ├── db/
+│       │   └── mongo.py
+│       ├── models/
+│       │   ├── __init__.py
+│       │   └── user.py
+│       ├── routes/
+│       │   ├── __init__.py
+│       │   ├── login.py
+│       │   ├── protected.py
+│       │   └── signup.py
+│       ├── schemas/
+│       │   ├── __init__.py
+│       │   ├── token.py
+│       │   └── user.py
+│       ├── services/
+│       │   ├── __init__.py
+│       │   ├── auth.py
+│       │   └── user_service.py
+│       └── utils/
+│           ├── __init__.py
+│           ├── email_service.py
+│           ├── i18n.py
+│           ├── limiter.py
+│           ├── criar_usuario_mock.py
+│           ├── security.py
+│           ├── verificar_mongodb.py
+│           └── update_requirements.py
 ```
 
 ---
 
-## ⚙️ Pré-requisitos
-
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
-- (Opcional) [MongoDB Compass](https://www.mongodb.com/products/compass) para visualizar os dados
-- Python 3.11+ (para desenvolvimento local com venv)
-
----
-
-## ▶️ Como rodar o projeto
+## ▶️ Como rodar com Docker
 
 ```bash
 docker-compose up --build
 ```
 
-Acesse a API em:  
-📎 [http://localhost:8000/docs](http://localhost:8000/docs)
+Acesse:
+- Frontend: http://localhost:3000
+- API Swagger: http://localhost:8000/docs
 
 ---
 
-## ✅ Verificação automática de conexão com MongoDB
-
-A aplicação realiza uma checagem automática ao subir. Se estiver tudo ok:
-
-```
-INFO:root:✅ Conexão com o MongoDB estabelecida com sucesso.
-```
-
----
-
-## 🧪 Criar usuário de teste no MongoDB
-
-Ao iniciar em ambiente `dev`, é criado um usuário automaticamente:
-
-- **Email**: `usuario@exemplo.com`  
-- **Senha**: `senha123`
+## ✅ Funcionalidades principais (backend)
+- Autenticação JWT (login, signup)
+- Proteção de rotas via token Bearer
+- Integração real com MongoDB
+- Criação automática de usuário em dev
+- Validações com Pydantic e email-validator
+- Internacionalização de mensagens (i18n pt/en)
+- Envio de e-mail via SMTP (Gmail/Outlook)
+- Rate limiting básico (por IP)
+- Testes automatizados com `pytest`
 
 ---
 
-## 🔐 Testar rota de login `/login`
+## 🧪 Testes
 
-### Acesse:
-
-📎 [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### Faça login com:
-
-```
-username: usuario@exemplo.com
-password: senha123
-```
-
-Resposta esperada:
-
-```json
-{
-  "access_token": "<token.jwt.aqui>",
-  "token_type": "bearer"
-}
-```
-
----
-
-## 🔒 Acessar rota protegida `/protegido`
-
-1. Copie o token JWT obtido no `/login`
-2. Vá até `/docs`, clique em **Authorize**
-3. Cole:
-
-```
-Bearer <seu_token>
-```
-
-4. Teste a rota `/protegido`. A resposta será:
-
-```json
-{
-  "mensagem": "Você acessou uma rota protegida!",
-  "usuario": "usuario@exemplo.com"
-}
-```
-
----
-
-## 🧪 Rodar testes automatizados (em construção)
-
-Execute os testes com:
-
+Executar os testes:
 ```bash
 docker-compose exec auth_service pytest
 ```
 
-Os testes estão em `tests/test_auth.py`, incluindo:
-
-- Login com credenciais inválidas
-- Login com credenciais válidas (usuário mock)
+Os testes cobrem:
+- Login válido e inválido
+- Cadastro com e sem falhas
+- Proteção contra spam (rate limit)
+- Acesso a rota protegida com JWT
 
 ---
 
-## 📂 Conectar ao MongoDB pelo Compass
+## 🔒 Segurança e produção
 
-Acesse:
+Antes de subir para produção, lembre-se de:
 
+- Proteger suas chaves `.env`, como `JWT_SECRET`, `EMAIL_PASSWORD`, `MONGO_URI`
+- Nunca subir `.env` ao GitHub (garantido via `.gitignore`)
+- Usar **Docker Secrets**, **AWS Secrets Manager** ou **Vault** para variáveis sensíveis em ambiente cloud
+- Ativar HTTPS e autenticação segura em endpoints críticos
+
+
+- Variáveis de ambiente devem ser protegidas com `Docker Secrets` ou `.env.production`
+- Recomendado usar Redis em produção para rate limiting
+- MongoDB em nuvem (MongoDB Atlas)
+
+---
+
+## ⚙️ Pré-requisitos
+
+Antes de rodar o projeto, é necessário ter:
+
+- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/)
+- (Opcional) [MongoDB Compass](https://www.mongodb.com/products/compass) para visualizar dados
+- Acesso ao `.env` local (baseado em `.env.example`)
+
+---
+
+## 📂 MongoDB + Compass (dev)
+
+URI:
 ```
-mongodb://localhost:28000
+mongodb://localhost:27018
 ```
-
-Banco: `OliveiraDevelops`  
+Banco: `OliveiraDevelops`
 Coleção: `users`
 
 ---
 
-## ⚙️ Variáveis de Ambiente (.env)
-
+## ⚙️ Variáveis de ambiente (.env exemplo)
 ```env
-# Ambiente
 ENV=dev
-
-# JWT
-JWT_SECRET=minha_chave_secreta_segura
+JWT_SECRET=sua_chave_segura
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
-
-# MongoDB
 MONGO_URI=mongodb://mongodb:27017
 MONGO_DB_NAME=OliveiraDevelops
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USERNAME=seu_email@gmail.com
+EMAIL_PASSWORD=sua_senha_de_app
+EMAIL_FROM=Empreenda+ <seu_email@gmail.com>
 ```
 
 ---
 
-Essa flag ativa a **atualização automática** do `requirements.txt`.
+## 🔁 Atualização automática de dependências
+Em ambiente `dev`, o arquivo `requirements.txt` é atualizado automaticamente com `pip freeze` via `update_requirements.py`.
 
 ---
 
-## 🛠️ Atualização do requirements.txt
-
-O arquivo `requirements.txt` é atualizado automaticamente em ambiente de desenvolvimento toda vez que o container sobe.
-
----
-
-## 📌 Notas de segurança
-
-Antes de subir para produção, lembre-se de:
-
-- Proteger suas chaves `.env` e JWT_SECRET
-- Usar **Docker Secrets** ou **Vault** para credenciais sensíveis
-
----
-
-✅ ETAPAS JÁ CONCLUÍDAS
-
-✅ Etapa 1 – Estrutura Inicial do Projeto
-
-Estrutura de pastas organizada (auth_service/, routes/, models/, services/, utils/, tests/)
-
-Uso de Docker + Docker Compose
-
-Configuração de ambiente com .env e reload automático com uvicorn
-
-✅ Etapa 2 – Login com JWT
-
-Rota /login funcional
-
-Autenticação via OAuth2PasswordRequestForm
-
-Senhas com hash bcrypt
-
-Geração de tokens JWT com tempo de expiração
-
-Schema de resposta TokenResponse
-
-✅ Etapa 3 – Proteção de Rotas
-
-Rota protegida /protegido
-
-Autenticação via Bearer Token
-
-Dependência de segurança get_current_user
-
-Verificação do token e retorno do usuário
-
-✅ Etapa 4 – Integração Real com MongoDB
-
-Substituição de usuários fake por persistência real
-
-MongoDB funcional com volume Docker (mongodb)
-
-Criação automática de usuário de teste (criar_usuario_mock.py)
-
-Conexão validada automaticamente no startup (verificar_conexao_mongodb)
-
-Compass conectado com banco containerizado
-
-✅ Etapa 5 – Cadastro Real de Usuários
-
-Rota /signup funcional com persistência no MongoDB
-
-Esquema SignupRequest validando os dados
-
-Proteção contra e-mails duplicados
-
-Testes automatizados para /signup:
-
-Cadastro válido
-
-E-mail duplicado
-
-Proteção contra SPAM por IP
-
-Controle de IP temporário (rate limit por IP)
-
-Logs para facilitar debug
-
-Observação registrada para uso de Redis no futuro em produção
-
-Atualização automática do requirements.txt
-
-Venv configurado com activate_hook
-
-🎁 Extras
-
-Logs informativos no terminal
-
-requirements.txt atualizado automaticamente apenas no ambiente dev
-
-Observação sobre @app.on_event("startup") marcada para futura migração para lifespan
-
-README.md completo e comentado
-
-Proteção mínima contra SPAM funcional
-
----
-
-Testes automatizados em estrutura pronta (tests/)
 ## 👥 Sobre o projeto
 
-**Empreenda+** é um sistema pensado para simplificar a vida do **MEI brasileiro**, com foco em automação, orientação inteligente e integração com parceiros.
+**Empreenda+** é uma plataforma digital para **MEIs** e microempresários:
 
 - Abertura de CNPJ
-- Emissão de NF
-- Alertas fiscais
-- Atendimento automatizado com IA
+- Emissão de notas fiscais
+- Alertas de obrigações fiscais
+- Integração com parceiros
+- IA para atendimento e automação
+
+Desenvolvido com ❤️ em Python e TypeScript, com foco em escalabilidade, segurança e UX.
 
 ---
 
-Feito com ❤️ e Python...
+> Para dúvidas técnicas ou sugestões, abra uma issue no repositório ou entre em contato via e-mail profissional.

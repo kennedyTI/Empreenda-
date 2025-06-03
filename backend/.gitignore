@@ -1,35 +1,62 @@
-# Byte-compiled / cache
+# === Python Bytecode / Cache ===
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 *.pyc
 
-# Virtual Environment
+# === Virtual Environments ===
 venv/
+.venv/
 ENV/
 env/
-.venv/
+pip-selfcheck.json
 
-# Editor
+# === VSCode / IDE ===
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Environment Variables
+# === Arquivos de ambiente (NUNCA commitar senhas) ===
 .env
 .env.*
+!.env.example
 
-# Test cache
+# === Testes ===
 .pytest_cache/
 coverage/
 htmlcov/
+.tox/
+.nox/
 
-# Docker
+# === Logs / PID / temporários ===
 *.log
 *.pid
-*.seed
 *.pid.lock
+*.seed
+*.bak
+*.tmp
 
-# System files
+# === Docker (volumes/cache/etc) ===
+**/mongo_data/
+docker-compose.override.yml
+
+# === Mac / Windows / Linux específicos ===
 .DS_Store
 Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# === Node (caso tenha frontend no mesmo repo) ===
+node_modules/
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# === Compilados em geral ===
+*.out
+*.exe
+*.dll
+*.so
+*.dSYM

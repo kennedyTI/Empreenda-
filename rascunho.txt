@@ -1,0 +1,123 @@
+Tutorials:
+
+1ª) Ambiente virtual.
+	
+	1.1ª)python -m venv env => cria um ambiente virtual:
+	
+	1.2ª)env\Scripts\activate => ativa o ambiente virtual:
+
+		OBS) Caso o sistemas windows não dê permissão, No PowerShell digite o seguinte comando e pressione enter seguintes códigos abaixo:
+			
+			a) Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+			b) Será perguntado se deseja aceitar as mudanças, digite s e pressione enter para confirmar.
+			c) Seguindo os passos acima será liberado a permissão para a execução de scripts no PowerShell
+	
+ 		1.3ª)Clear => Limpa o terminal
+
+
+
+ 2ª) Pip.
+		
+	2.1ª)python.exe -m pip install --upgrade pip => atualiza o pip install
+ 
+ 	2.2ª)python -m pip list => exibirá todos os pacotes instalados no ambiente virtual:
+	
+	2.3ª)pip freeze > requirements.txt => produzirá uma lista dos pacotes instalados:
+	
+	2.4ª)python -m pip install -r requirements.txt => instala todos os pacotes listados no requirements:
+	
+	2.5ª)pip uninstall NomeDaBiblioteca => Desinstala a biblioteca desejada.
+
+3ª) Django.
+
+	3.1ª)pip3 install django => instala o django:
+
+	3.2ª)django-admin startproject NomeDoProjeto . => cria um novo projeto:
+
+	3.3ª)python3 manage.py runserver => inicia o projeto:
+	
+	3.4ª)python3 manage.py startapp NomeDoApp=> cria um novo App(tela):
+		
+		a) Ao criar um novo app, vá em settings.py da pasta principal e adiciona o nome do app na lista INSTALLED_APPS.
+
+4ª) Git.
+
+		4.1ª)git init => iniciar o git:
+
+		4.2ª)crie um arquivo '.gitignore' onde conterá uma lista de itens que devem ser ignorados pelo git:
+		
+		4.3ª)git add . => adiciona todos os arquivos local no commit:
+
+		4.4ª)git status => verifica o status dos aquivos:
+
+		4.5ª)git commit -m 'tipagem: Comentário' => realiza o commit dos arquivos:
+
+5ª) Flask.
+
+		5.1ª)pip3 install Flask => instala o Flask:			
+
+6ª) pre-commit.
+
+		6.1ª)pip3 install pre-commit => instala a biblioteca pre-commit:
+
+		6.2ª)crie um arquivo '.pre-commit-config.yaml' que atualizará automaticamente a lista requirements.txt add todas as bibliotecas utilizadas:
+
+		6.3ª)pre-commit install => instala o pre-commit:
+
+
+7ª) Docker.
+
+		7.1ª)docker build -- tag (nome da imagem) => cria uma imagem no docker:
+
+		7.2ª)docker images => mostra as imagens salvas:
+
+		7.3ª)docker ps -a => mostra os containers:
+
+		7.4ª)docker run -d -p 8000:8000 --name django python3_django5 => cria um container:
+
+			a) -d => nescessário para rodar em segundo plano:
+			b) -p => nescessário para adcionar a porta:
+			c) name => nescessário para adcionar o nome do container:
+
+		7.5ª)docker stop (nome do container) => para o container:
+
+		7.6ª)docker start (nome do container) => inicia o container:
+
+		7.7ª)docker exec -it (nome do container) bash => entra no container:
+		
+		7.8ª)docker rm (nome do container) => remove o container:
+
+		7.9ª)docker rmi (nome da imagem) => remove a imagem:
+
+		7.10ª)docker compose up => Inicia todos os serviços/configurações definidos no arquivo docker-compose.yml:
+
+   8ª) NodeJS
+
+	8.1ª)Baixe e instale o NodeJS:
+	
+	8.2ª)npm install --global yarn => Abra o PowerShell e execute esse comando:
+	
+	8.3ª)npm install -g gulp => Abra o PowerShell e execute esse comando:
+	
+	8.4ª)yarn install => Abra o PowerShell e execute esse comando:
+	
+	8.5ª)gulp => Abra o PowerShell e execute esse comando:
+	
+	8.6ª)python manage.py migrate => Atualiza os dados no Banco de Dados:
+	
+	8.7ª)python manage.py createsuperuser => Criar super usuário para o servidor:
+		
+	
+
+🔧 MELHORIAS FUTURAS: 
+	models/user.py
+		Converter para uso de motor (async MongoDB) no futuro para escalabilidade.
+		Separar pwd_context para utils/security.py se quiser centralizar todas as funções de hashing
+	auth_service/routes/signup.py
+		Separar IP real em proxies (usando X-Forwarded-For) para cloud
+		Adicionar confirmação de e-mail após cadastro
+		Testes automatizados simulando limites de IP e casos inválidos
+	utils/limiter
+		 Para ambientes de produção, recomenda-se:
+		 	Redis (via fastapi-limiter)
+			Cloudflare / API Gateway / WAF externo

@@ -1,0 +1,62 @@
+name: 🔍 Testes Backend - Empreenda+
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+
+jobs:
+  test:
+    name: ⚙️ Rodar testes automatizados
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.stats()'" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
+    steps:
+    - name: ⬇️ Checkout do código
+      uses: actions/checkout@v4
+
+    - name: 🐍 Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+    - name: 📦 Instalar dependências
+      run: |
+        cd backend
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+
+    - name: 🧪 Rodar testes com pytest
+      env:
+        MONGO_URI: mongodb://localhost:27017
+        MONGO_DB_NAME: OliveiraDevelops
+        JWT_SECRET: segredo_super_seguro
+        ALGORITHM: HS256
+        ACCESS_TOKEN_EXPIRE_MINUTES: 30
+        ENV: test
+      run: |
+        cd backend
+        source venv/bin/activate
+        pytest --tb=short --disable-warnings -v tests/
+
+    - name: ✅ Sucesso
+      if: success()
+      run: echo "✅ Todos os testes passaram com sucesso!"
+
+    - name: ❌ Falha nos testes
+      if: failure()
+      run: echo "❌ Pelo menos um teste falhou."

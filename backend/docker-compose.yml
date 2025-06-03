@@ -1,27 +1,31 @@
-services:
-  auth_service:
-    # Usa o Dockerfile localizado no diretório atual (./)
-    build: .  
-    # Nome do container
-    container_name: auth_service  
-    # Define o diretório de trabalho no container
-    working_dir: /app  
-    # Expõe a porta 8000 do container para a máquina host
-    ports:
-      - "8000:8000"  
-    # Mapeia todo o projeto local para dentro do container (sincroniza alterações)
-    volumes:
-      - .:/app  
-    environment:
-      - JWT_SECRET=${JWT_SECRET}
-      - ENV=${ENV}  # Define a variável de ambiente para indicar ambiente de desenvolvimento
-      - MONGO_DB_NAME=${MONGO_DB_NAME}
-      
-    # Comando para iniciar a aplicação FastAPI
-    command: uvicorn auth_service.main:app --host 0.0.0.0  --port 8000 --reload
+# docker-compose.yml - Empreenda+ (Fullstack: Backend + Frontend + MongoDB)
 
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: auth_service
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
     depends_on:
       - mongodb
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
 
   mongodb:
     image: mongo:7
