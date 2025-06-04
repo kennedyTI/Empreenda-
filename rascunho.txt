@@ -121,3 +121,26 @@ Tutorials:
 		 Para ambientes de produção, recomenda-se:
 		 	Redis (via fastapi-limiter)
 			Cloudflare / API Gateway / WAF externo
+
+
+
+frontend/
+├── pages/
+│   ├── index.tsx              # Landing institucional
+│   ├── quem-somos.tsx
+│   ├── fale-conosco.tsx
+│   ├── ajuda.tsx
+│   ├── login.tsx              # Tela de login
+│   └── dashboard/
+│       ├── index.tsx          # Home logada
+│       ├── cursos.tsx
+│       ├── nfe.tsx
+│       └── configuracoes.tsx
+├── components/
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   ├── AuthGuard.tsx         # Protege rotas logadas
+├── styles/
+│   └── tailwind.config.ts
+├── utils/
+│   └── auth.ts
